@@ -8,6 +8,7 @@ const HabitCard = ({ habitData }) => {
   const { deleteHabitDispatch, archiveHabitDispatch, editHabitDispatch } =
     useHabitsContext();
   const [showDetails, setShowDetails] = useState(false);
+
   const {
     id: habitId,
     name,
@@ -19,6 +20,10 @@ const HabitCard = ({ habitData }) => {
   } = habitData;
   const location = useLocation();
   const isInArchivePage = location.pathname === '/archives';
+
+  if (isArchived && !isInArchivePage) {
+    return null;
+  }
 
   return (
     <Box as='article' border='2px solid #222' borderRadius='md' h='fit-content'>
@@ -55,11 +60,10 @@ const HabitCard = ({ habitData }) => {
           >
             <Button>Edit</Button>
             <Button onClick={() => deleteHabitDispatch(habitId)}>Delete</Button>
-            {!isArchived && (
-              <Button onClick={() => archiveHabitDispatch(habitId)}>
-                Archive
-              </Button>
-            )}
+
+            <Button onClick={() => archiveHabitDispatch(habitId)}>
+              Archive
+            </Button>
           </Box>
         </Box>
       )}
