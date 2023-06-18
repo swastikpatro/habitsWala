@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { useHabitsContext } from '../HabitsContextProvider';
 
-const Form = ({ onClose }) => {
+const Form = ({ isAdding, edittingData, onClose }) => {
   const { addToHabitsDispatch } = useHabitsContext();
   const [inputs, setInputs] = useState({
     name: '',
@@ -98,11 +98,14 @@ const Form = ({ onClose }) => {
         colorScheme='blue'
         mr={3}
         onClick={() => {
-          addToHabitsDispatch({
-            ...inputs,
-            id: self.crypto.randomUUID(),
-            isArchived: false,
-          });
+          if (isAdding && !edittingData) {
+            addToHabitsDispatch({
+              ...inputs,
+              id: self.crypto.randomUUID(),
+              isArchived: false,
+            });
+          }
+
           onClose();
         }}
       >

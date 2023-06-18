@@ -11,13 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Form from './Form';
 
-const HabitModal = ({
-  isAdding = false,
-  isEditing = false,
-  habitData,
-  isOpen,
-  onClose,
-}) => {
+const HabitModal = ({ isAdding = true, edittingData, isOpen, onClose }) => {
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -25,10 +19,12 @@ const HabitModal = ({
         <ModalHeader>{isAdding ? 'Add' : 'Edit'} Habit</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Form onClose={onClose} />
+          <Form
+            isAdding={isAdding}
+            edittingData={edittingData}
+            onClose={onClose}
+          />
         </ModalBody>
-
-        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );
