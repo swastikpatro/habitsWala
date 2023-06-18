@@ -12,14 +12,18 @@ import { useState } from 'react';
 import { useHabitsContext } from '../HabitsContextProvider';
 
 const Form = ({ isAdding, edittingData, onClose }) => {
-  const { addToHabitsDispatch } = useHabitsContext();
-  const [inputs, setInputs] = useState({
-    name: '',
-    repeat: '',
-    timeOfDay: '',
-    goal: '',
-    start: '',
-  });
+  const { addToHabitsDispatch, editHabitDispatch } = useHabitsContext();
+  const [inputs, setInputs] = useState(
+    !!edittingData
+      ? edittingData
+      : {
+          name: '',
+          repeat: '',
+          timeOfDay: '',
+          goal: '',
+          start: '',
+        }
+  );
 
   const updateInput = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -104,12 +108,14 @@ const Form = ({ isAdding, edittingData, onClose }) => {
               id: self.crypto.randomUUID(),
               isArchived: false,
             });
+          } else {
+            editHabitDispatch(inputs);
           }
 
           onClose();
         }}
       >
-        add
+        {isAdding && !editHabitDispatch ? 'Add' : 'Update'}
       </Button>
     </FormControl>
   );

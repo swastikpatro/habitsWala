@@ -3,10 +3,10 @@ import { Box, Button, Heading, Spacer, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useHabitsContext } from '../HabitsContextProvider';
+import Form from './Form';
 
 const HabitCard = ({ habitData }) => {
-  const { deleteHabitDispatch, archiveHabitDispatch, editHabitDispatch } =
-    useHabitsContext();
+  const { deleteHabitDispatch, archiveHabitDispatch } = useHabitsContext();
   const [showDetails, setShowDetails] = useState(false);
 
   const {
@@ -20,6 +20,8 @@ const HabitCard = ({ habitData }) => {
   } = habitData;
   const location = useLocation();
   const isInArchivePage = location.pathname === '/archives';
+
+  const [isEditting, setIsEditting] = useState(false);
 
   if (isArchived && !isInArchivePage) {
     return null;
@@ -44,7 +46,7 @@ const HabitCard = ({ habitData }) => {
         )}
       </Box>
 
-      {showDetails && (
+      {showDetails && !isEditting && (
         <Box as='div' p='2rem' borderTop='1px solid gray'>
           <Text mb='.5rem'>Repeat: {repeat}</Text>
           <Text mb='.5rem'>Time of day: {timeOfDay}</Text>
@@ -58,13 +60,18 @@ const HabitCard = ({ habitData }) => {
             gap={'1rem'}
             mt='.5rem'
           >
-            <Button>Edit</Button>
+            <Button onClick={() => setIsEditting(true)}>Edit</Button>
             <Button onClick={() => deleteHabitDispatch(habitId)}>Delete</Button>
 
             <Button onClick={() => archiveHabitDispatch(habitId)}>
               Archive
             </Button>
           </Box>
+        </Box>
+      )}
+      {showDetails && isEditting && (
+        <Box as='div' p='2rem' borderTop='1px solid gray'>
+          <Form edittingData={habitData} onClose={() => setIsEditting(false)} />
         </Box>
       )}
     </Box>
