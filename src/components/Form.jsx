@@ -18,10 +18,10 @@ const Form = ({ isAdding, edittingData, onClose }) => {
       ? edittingData
       : {
           name: '',
-          repeat: '',
-          timeOfDay: '',
-          goal: '',
-          start: '',
+          repeat: 'None',
+          timeOfDay: 'Anytime',
+          goal: 'once a day',
+          start: 'today',
         }
   );
 
@@ -32,13 +32,15 @@ const Form = ({ isAdding, edittingData, onClose }) => {
   return (
     <FormControl>
       <Box as='div'>
-        <FormLabel>Habit Name: </FormLabel>
-        <Input
-          type='text'
-          name='name'
-          value={inputs.name}
-          onChange={updateInput}
-        />
+        <FormControl isRequired>
+          <FormLabel>Habit Name: </FormLabel>
+          <Input
+            type='text'
+            name='name'
+            value={inputs.name}
+            onChange={updateInput}
+          />
+        </FormControl>
       </Box>
 
       <Box as='div'>
@@ -102,6 +104,10 @@ const Form = ({ isAdding, edittingData, onClose }) => {
         colorScheme='blue'
         mr={3}
         onClick={() => {
+          if (!inputs.name.trim()) {
+            return;
+          }
+
           if (isAdding && !edittingData) {
             addToHabitsDispatch({
               ...inputs,
@@ -112,7 +118,9 @@ const Form = ({ isAdding, edittingData, onClose }) => {
             editHabitDispatch(inputs);
           }
 
-          onClose();
+          if (!!inputs.name.trim()) {
+            onClose();
+          }
         }}
       >
         {isAdding && !editHabitDispatch ? 'Add' : 'Update'}
